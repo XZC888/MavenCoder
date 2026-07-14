@@ -1,4 +1,4 @@
-from .model import Llama, ModelBase, DeepSeek, GPT4o_mini, GPT4_1_nano, O1_MINI, QWEN, GLM_4_7
+from .model import Llama, ModelBase, DeepSeek, GPT4o_mini, GPT4_1_nano, DeepSeek_v4_flash, QWEN, GLM_4_7
 
 def model_factory(
     model_name: str,
@@ -12,8 +12,8 @@ def model_factory(
         return GPT4o_mini(key, url, embedding_key, embedding_url, embedding_model)
     elif model_name == "gpt-4.1-nano":
         return GPT4_1_nano(key, url, embedding_key, embedding_url, embedding_model)
-    elif model_name == "o1-mini":
-        return O1_MINI(key, url, embedding_key, embedding_url, embedding_model)
+    elif model_name == "deepseek-v4-flash":
+        return DeepSeek_v4_flash(key, url, embedding_key, embedding_url, embedding_model)
     elif model_name == "qwen3-coder-plus":
         return QWEN(key, url, embedding_key, embedding_url, embedding_model)
     elif model_name == "glm-4.7":

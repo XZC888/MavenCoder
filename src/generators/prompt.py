@@ -1,6 +1,7 @@
+from src.constant import simple_datasets
+
 class prompt_words:
     def __init__(self):
-        self.simple_datasets = ["humanevalplus", "mbppplus"]
 
         self.ESTIMATION_SYSTEM = "You are an expert in evaluating problem difficulty for competitive programming problems."
 
@@ -109,7 +110,7 @@ That's think step by step for the given problem."""
         if approach:
             prompt += f"### Approach:\n{approach}\n\n"
 
-        if dataset_type in self.simple_datasets:
+        if dataset_type in simple_datasets:
             return prompt
 
         if starter_code:

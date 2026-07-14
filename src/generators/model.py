@@ -121,7 +121,7 @@ class GPTChat(ModelBase):
 
         self.client = openai.OpenAI(**kwargs)
         self.embedding_model = embedding_model
-        self.request_extra_body = None
+        self.request_extra_body = {"thinking": {"type": "disabled"}} # None
         
         embedding_kwargs = {"api_key": embedding_key if embedding_key else key}
         if embedding_url:
@@ -207,9 +207,9 @@ class GPT4_1_nano(GPTChat):
     def __init__(self, key, url, embedding_key="", embedding_url="", embedding_model: str = "text-embedding-3-large"):
         super().__init__("gpt-4.1-nano", key, url, embedding_key, embedding_url, embedding_model)
 
-class O1_MINI(GPTChat):
+class DeepSeek_v4_flash(GPTChat):
     def __init__(self, key, url, embedding_key="", embedding_url="", embedding_model: str = "text-embedding-3-large"):
-        super().__init__("o1-mini", key, url, embedding_key, embedding_url, embedding_model)
+        super().__init__("deepseek-v4-flash", key, url, embedding_key, embedding_url, embedding_model)
 
 class QWEN(GPTChat):
     def __init__(self, key, url, embedding_key="", embedding_url="", embedding_model: str = "text-embedding-3-large"):

@@ -19,7 +19,7 @@ def get_args():
                         help="The final processed test file directory", default=f"./test")
     
     parser.add_argument("--dataset_type", type=str,
-                        help="dataset type", required=True) # choices=["lcb", "code_contests", "humanevalplus", "mbppplus"]
+                        help="dataset type", required=True)
     parser.add_argument("--model", type=str, 
                         help="model names", required=True)
 

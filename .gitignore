@@ -66,3 +66,6 @@ Desktop.ini
 # Local runtime/result artifacts (optional)
 # Uncomment if you do not want to track generated outputs
 # results/
+web/data/users.json
+web/data/codes.json
+web/data/histories.json

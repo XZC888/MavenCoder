@@ -1,4 +1,4 @@
-competitive_datasets = ["lcb", "code_contests"]
+competitive_datasets = ["lcb", "code_contests", "apps"]
 
 simple_datasets = ["humanevalplus", "mbppplus", "mbpp", "humaneval"]
 
@@ -384,4 +384,6 @@ Important rules:
 Output format example:
 ```python
 [0.8, 0.3, 1.0, 0.6]
-```'''
+```
+
+**Note: ensure the length of the list equals to the number of total steps.**'''

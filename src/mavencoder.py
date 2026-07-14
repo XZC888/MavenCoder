@@ -109,7 +109,7 @@ def plan_tree_planning(ctx: Context):
     return sol, token_num, plan_tokens
 
 
-def plan_verification(ctx: Context, solution_approach: str, plan_tokens):
+def plan_verification(ctx: Context, solution_approach: str, plan_tokens, strategy: str):
     token_num = 0
 
     competitive_type = ctx.config.dataset_type not in simple_datasets
@@ -118,7 +118,7 @@ def plan_verification(ctx: Context, solution_approach: str, plan_tokens):
     pv.get_solution_plan(solution_approach)
 
     for _ in range(ctx.config.r_valid):
-        C = pv.caculate_confidence(plan_tokens)
+        C = pv.caculate_confidence(plan_tokens, strategy)
         W = pv.caculate_weights_values()
 
         modular_code, code_msg = pv.gen_modular_code()
@@ -156,7 +156,7 @@ def plan_verification(ctx: Context, solution_approach: str, plan_tokens):
     return solution_approach, token_num
 
 
-def planning_stage(ctx: Context, diff: str):
+def planning_stage(ctx: Context, diff: str, strategy: str):
     if diff == "hard":
         sol, token_num, plan_tokens = plan_tree_planning(ctx)
     else:
@@ -165,7 +165,7 @@ def planning_stage(ctx: Context, diff: str):
         )
         token_num = count_tokens(sol, msg)
 
-    sol, token_verification = plan_verification(ctx, sol, plan_tokens)
+    sol, token_verification = plan_verification(ctx, sol, plan_tokens, strategy)
     token_num += token_verification
 
     return sol, token_num
@@ -254,7 +254,7 @@ def mavencoder_task(item: dict, config: Config):
         ctx.item["reflection"] = reflection
 
     for r in range(1, config.r_global + 1):
-        approach, tokens = planning_stage(ctx, diff)
+        approach, tokens = planning_stage(ctx, diff, config.strategy)
         tracker.add("solution_approach_tokens", tokens)
 
         code, tokens = generate_code(ctx, approach)

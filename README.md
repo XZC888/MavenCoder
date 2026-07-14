@@ -82,5 +82,18 @@ After completing a dataset run, all post-processed results will be saved in the 
 
 ### Evaluation Methods by Dataset
 
-- **HumanEval+ and MBPP+**: Use the [EvalPlus](https://github.com/evalplus/evalplus) evaluation framework for comprehensive testing.
+- **HumanEval+ and MBPP+**: Use the [EvalPlus](https://github.com/evalplus/evalplus) evaluation framework for comprehensive testing, it will also provide evaluation results for the base version (`humaneval` and `mbpp`).
 - **LiveCodeBench (LCB) and CodeContests**: Refer to the [LiveCodeBench](https://github.com/LiveCodeBench/LiveCodeBench) evaluation guidelines.
+
+## 📦Use More Models and Benchmarks
+
+### Models
+
+1. Please add new class in `src/generators/model.py` (see `class GPT4o_mini`)
+2. Add new branch logic in `src/generators/factory.py`
+3. import new class in `src/generators/__init__.py`
+
+### Benchmarks
+
+1. modify datasets type in `src/constant.py`
+2. process the new benchmark to the same style in the data directory (competitive benchmark see `lcb.jsonl` and simple ones see `mbppplus.jsonl`)

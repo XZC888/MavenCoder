@@ -195,15 +195,15 @@ class Plan_Valifier:
         self.plan_steps = extract_steps(solution_plan)
 
 
-    def caculate_confidence(self, plan_tokens):
+    def caculate_confidence(self, plan_tokens, strategy):
         n_steps = len(self.plan_steps)
 
-        if plan_tokens:
+        if strategy != "prompt":
             C = StepAnalyzer.step_confidence(self.plan_steps, plan_tokens)
             return softmax(C)
 
         # LLM fallback
-        print("plan tokens not support, fallback to LLM evaluation for step reliability.")
+        # print("plan tokens not support, fallback to LLM evaluation for step reliability.")
         
         steps = "\n".join(
             f"Step {i+1}: {step}"
@@ -215,7 +215,7 @@ class Plan_Valifier:
             user_content=(
                 f"Problem:\n{self.item['problem']}\n\n"
                 f"Plan Steps:\n{steps}\n\n"
-                f"Return a Python list of {n_steps} scores in [0, 1]."
+                f"Return a Python list of **{n_steps} scores** in [0, 1]."
             ),
             system_content=plan_step_eval_sys,
         )
@@ -294,9 +294,39 @@ class Plan_Valifier:
             responses.append(response)
             messages_list.append(messages)
 
-            fact_yaml = yaml.safe_load(extract_code(response, "yaml"))
+            # fact_yaml = yaml.safe_load(extract_code(response, "yaml"))
 
-            scores = [r["score"] for r in fact_yaml["steps"]]
+            # scores = [r["score"] for r in fact_yaml["steps"]]
+            # F_values.append(scores)
+
+            fact_yaml = yaml.safe_load(extract_code(response, "yaml"))
+            
+            scores = []
+            for r in fact_yaml.get("steps", []):
+                if "score" in r:
+                    scores.append(r["score"])
+                elif isinstance(r, dict):
+                    
+                    def find_key_recursive(data, target_key):
+                        if target_key in data:
+                            return data[target_key]
+                        for value in data.values():
+                            if isinstance(value, dict):
+                                result = find_key_recursive(value, target_key)
+                                if result is not None:
+                                    return result
+                        return None
+
+                    score_val = find_key_recursive(r, "score")
+                    
+                    if score_val is not None:
+                        scores.append(score_val)
+                    else:
+                        scores.append(0)
+            
+            if len(scores) != n_steps:
+                scores = (scores + [0] * n_steps)[:n_steps]
+
             F_values.append(scores)
 
         F = np.mean(np.array(F_values), axis=0)

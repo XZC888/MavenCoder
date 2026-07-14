@@ -2,11 +2,12 @@ from concurrent.futures import ProcessPoolExecutor
 from typing import Tuple
 from .simple_eval import run_assert
 from .competitive_eval import run_stdin
+from src.constant import competitive_datasets, simple_datasets
 
 def run_tests(code: str, item: dict, dataset_type: str) -> Tuple[bool, str]:
-    if dataset_type in ["mbppplus", "humanevalplus", "mbpp", "humaneval"]:
+    if dataset_type in simple_datasets:
         test_func = run_assert
-    elif dataset_type in ["lcb", "code_contests"]:
+    elif dataset_type in competitive_datasets:
         test_func = run_stdin
     else:
         raise RuntimeError(f"Unknown dataset type: {dataset_type}")
